@@ -249,7 +249,7 @@ su - $USERNAME <<EOF
 	# --- THEMES & FONTS --- 
 	paru -S --noconfirm ttf-jetbrains-mono-nerd ttf-font-awesome noto-fonts-emoji ttf-material-symbols-variable-git 
 	paru -S --noconfirm ttf-cascadia-code-nerd ttf-meslo-nerd noto-fonts inter-font
-	paru -S --noconfirm catppuccin-gtk-theme-mocha tela-circle-icon-theme-git bibata-cursor-theme-bin 
+	paru -S --noconfirm catppuccin-gtk-theme-mocha papirus-icon-theme bibata-cursor-theme-bin 
 	paru -S --noconfirm kvantum qt5-wayland qt6-wayland qt5ct qt6ct adw-gtk3
 	
 	echo "💿 Installing Hypr Ecosystem..."

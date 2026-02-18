@@ -262,7 +262,7 @@ su - $USERNAME <<EOF
 	
 	# --- NIRI TOOLS--- 
 	paru -S --noconfirm niri uwsm xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk
-	paru -S --noconfirm polkit-kde-agent polkit-gnome grim slurp hyprpicker xcursor-breeze
+	paru -S --noconfirm polkit-gnome grim slurp hyprpicker xcursor-breeze
 	paru -S --noconfirm hyprpaper hypridle hyprlock hyprsunset wlogout-git ironbar
 	paru -S --noconfirm nwg-look nwg-displays swaync swayosd wayland-pipewire-idle-inhibit
 EOF

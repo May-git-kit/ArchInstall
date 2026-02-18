@@ -212,8 +212,8 @@ su - $USERNAME <<EOF
 	paru -S --noconfirm ventoy walker-bin
 	paru -S --noconfirm cameractrls obsidian planify file-roller
 	paru -S --noconfirm zathura zathura-pdf-mupdf mupdf-tools 
-	paru -S --noconfirm elephant czkawka-gui clipse
-	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp planify
+	paru -S --noconfirm czkawka-gui clipse
+	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp planify elephant
 	
 	echo "💿 Installing System Utilities Apps..."
 	# System Utilites APPS

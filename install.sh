@@ -56,7 +56,7 @@ Architecture = x86_64 x86_64_v3 x86_64_v4
 Color 
 CheckSpace 
 VerbosePkgLists 
-ParallelDownloads = 10
+ParallelDownloads = 15
 ILoveCandy
 #UseSyslog
 #NoProgressBar
@@ -189,8 +189,8 @@ su - $USERNAME <<EOF
     
     echo "💿 Installing Graphics Stack..."
     # Mesa & Vulkan Graphics Stack
-    paru -S --noconfirm mesa-git vulkan-radeon libva-mesa-driver mesa-vdpau vulkan-icd-loader
-    #paru -S --noconfirm ollama-vulkan lib32-mesa-git lib32-vulkan-radeon lib32-libva-mesa-driver lib32-mesa-vdpau
+    paru -S --noconfirm mesa vulkan-radeon libva-mesa-driver mesa-vdpau vulkan-icd-loader
+    #paru -S --noconfirm ollama-vulkan lib32-mesa lib32-vulkan-radeon lib32-libva-mesa-driver lib32-mesa-vdpau
     
     echo "💿 Installing ffmpeg Stack..."
     # ffmpeg Stack
@@ -198,6 +198,7 @@ su - $USERNAME <<EOF
     
     echo "💿 Installing GNOME Apps..."
     # GNOME APPS (gtk based)
+    
     paru -S --noconfirm nautilus python-nautilus nautilus-open-any-terminal nautilus-admin bubblewrap
     paru -S --noconfirm gvfs gvfs-mtp gvfs-goa gvfs-google gvfs-onedrive sushi-git udiskie
     paru -S --noconfirm gnome-disk-utility gnome-firmware gnome-calculator
@@ -208,11 +209,11 @@ su - $USERNAME <<EOF
 	echo "💿 Installing Apps..."
 	# APPS
 	paru -S --noconfirm zen-browser-bin localsend-bin
-	paru -S --noconfirm ventoy jamesdsp
+	paru -S --noconfirm ventoy 
 	paru -S --noconfirm cameractrls obsidian planify file-roller
 	paru -S --noconfirm zathura zathura-pdf-mupdf mupdf-tools 
-	paru -S --noconfirm walker-bin elephant czkawka-gui clipse
-	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek
+	paru -S --noconfirm elephant czkawka-gui clipse walker-bin
+	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp 
 	
 	echo "💿 Installing System Utilities Apps..."
 	# System Utilites APPS
@@ -256,9 +257,13 @@ su - $USERNAME <<EOF
 	# --- HYPR TOOLS---
 	paru -S --noconfirm uwsm libnewt aquamarine hyprland hyprpaper hyprpolkitagent hypridle hyprlock hyprsunset hyprshot hyprpicker hyprcursor  
 	paru -S --noconfirm xdg-desktop-portal-hyprland xdg-desktop-portal-gtk xorg-xwayland hyprland-qt-support hyprqt6engine hyprshutdown hyprpwcenter hyprgraphics 
-	paru -S --noconfirm nwg-look swaync wlogout-git snappy-switcher hyprkcs-git sddm swayosd
+	paru -S --noconfirm nwg-look nwg-dock-hyprland wdisplays hyprmon swaync wlogout-git snappy-switcher hyprkcs-git sddm swayosd
 	paru -S --noconfirm ironbar wayland-pipewire-idle-inhibit-git
 	
+	# --- NIRI TOOLS--- 
+	#paru -S --noconfirm niri xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk 
+	#paru -S --noconfirm waybar swaync swayosd-git wlsunset 
+	#paru -S --noconfirm polkit-kde-agent	
 EOF
 
 ============================================
@@ -294,5 +299,6 @@ sudo systemctl daemon-reload
 systemctl --user enable --now pipewire 
 systemctl --user enable --now pipewire-pulse 
 systemctl --user enable --now wireplumber
+systemctl --user enable --now hyprpolkitagent
 
 echo "✅ Master Setup Complete! Type 'exit' and reboot."

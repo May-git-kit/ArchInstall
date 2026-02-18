@@ -210,10 +210,10 @@ su - $USERNAME <<EOF
 	# APPS
 	paru -S --noconfirm zen-browser-bin localsend-bin
 	paru -S --noconfirm ventoy 
-	paru -S --noconfirm cameractrls obsidian planify file-roller
+	paru -S --noconfirm cameractrls obsidian  file-roller
 	paru -S --noconfirm zathura zathura-pdf-mupdf mupdf-tools 
-	paru -S --noconfirm elephant czkawka-gui clipse walker-bin
-	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp 
+	paru -S --noconfirm czkawka-gui clipse walker-bin
+	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp planify elephant
 	
 	echo "💿 Installing System Utilities Apps..."
 	# System Utilites APPS
@@ -221,7 +221,7 @@ su - $USERNAME <<EOF
 	paru -S --noconfirm brightnessctl power-profiles-daemon fwupd
 	paru -S --noconfirm zram-generator btrfs-progs e2fsprogs snapper
 	paru -S --noconfirm pamac-aur mission-center qdiskinfo
-	paru -S --noconfirm amdgpu_top uv electron
+	paru -S --noconfirm amdgpu_top uv
 	paru -S --noconfirm btrfs-assistant overskride-bin
 	#paru -S --noconfirm virt-manager bauh cups cups-pdf howdy
 	

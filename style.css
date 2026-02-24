@@ -1,118 +1,175 @@
-@define-color base   rgba(30, 30, 46, 0.65); /* Translucent glass */
-@define-color mantle rgba(24, 24, 37, 0.8);
-@define-color text   #cdd6f4;
-@define-color blue   #8caaee;
-@define-color green  #a6d189;
-@define-color red    #e78284;
-@define-color mauve  #ca9ee6;
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║  wlogout — Glassmorphism Card Style                         ║
+   ║  Inspired by: HyDE × end4, matching screenshot aesthetic    ║
+   ╚══════════════════════════════════════════════════════════════╝ */
 
-* {
-    font-family: "JetBrainsMono Nerd Font", "Material Design Icons", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    min-height: 0;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+/* ── Root window — blurred overlay ──────────────────────────── */
+window {
+  font-family:     "JetBrainsMono Nerd Font", "SF Pro Display", sans-serif;
+  font-size:       14px;
+  color:           rgba(255, 255, 255, 0.90);
+  background-color: rgba(15, 12, 24, 0.45);
+  background-image: none;
 }
 
-window#waybar {
-    background-color: transparent;
+/* ── Button layout container ─────────────────────────────────── */
+/* wlogout renders buttons inside a box — we make it a centered row */
+box {
+  background-color: transparent;
 }
 
-/* --- THE PILL DESIGN --- */
-/* Target all direct children of the left, center, and right module containers */
-.modules-left > widget > *,
-.modules-center > widget > *,
-.modules-right > widget > * {
-    background-color: @base;
-    color: @text;
-    border-radius: 100px; /* Perfect pill shape */
-    padding: 4px 14px;
-    margin: 4px 4px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+/* ── Base card style ─────────────────────────────────────────── */
+button {
+  /* Glassmorphism dark card */
+  background-color: rgba(38, 32, 58, 0.72);
+  background-image: none;
+
+  /* Rounded card shape */
+  border-radius:   20px;
+  border:          1px solid rgba(255, 255, 255, 0.10);
+
+  /* Icon + label layout */
+  padding:         50px 30px 36px;
+  margin:          0 10px;
+
+  /* Size */
+  min-width:       140px;
+  min-height:      180px;
+
+  /* Smooth card appearance */
+  box-shadow:
+    0  8px 32px rgba(0,   0,   0,   0.45),
+    0  2px  8px rgba(0,   0,   0,   0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  color:           rgba(255, 255, 255, 0.80);
+  transition:
+    background-color 0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform        0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow       0.30s ease,
+    border-color     0.30s ease,
+    color            0.20s ease;
+
+  /* Remove default GTK button chrome */
+  outline:         none;
+  -gtk-outline-radius: 20px;
 }
 
-/* Hover effect for all interactive pills */
-.modules-left > widget > *:hover,
-.modules-center > widget > *:hover,
-.modules-right > widget > *:hover {
-    background-color: @mantle;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-    color: @blue;
+/* ── Hover — card lifts, gets frosted purple-pink glass tint ─── */
+button:hover {
+  background-color: rgba(180, 130, 185, 0.42);
+  background-image: linear-gradient(
+    160deg,
+    rgba(220, 165, 210, 0.35) 0%,
+    rgba(150, 100, 180, 0.28) 50%,
+    rgba(110,  80, 160, 0.20) 100%
+  );
+
+  border-color:    rgba(220, 180, 230, 0.45);
+  border-width:    1px;
+
+  color:           rgba(255, 255, 255, 1.0);
+
+  /* Lift effect — card pops up like the Suspend card in screenshot */
+  transform:       translateY(-20px) scale(1.04);
+
+  box-shadow:
+    0 24px 60px rgba(160, 80, 180, 0.40),
+    0 12px 24px rgba(0,   0,   0,  0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 0 40px rgba(200, 150, 220, 0.12);
 }
 
-/* --- SPECIFIC MODULE TWEAKS --- */
-
-#custom-launcher {
-    font-size: 18px;
-    color: @blue;
-    padding-right: 18px;
-    padding-left: 18px;
+/* ── Focus (keyboard nav) — same as hover ─────────────────────── */
+button:focus {
+  background-color: rgba(180, 130, 185, 0.42);
+  background-image: linear-gradient(
+    160deg,
+    rgba(220, 165, 210, 0.35) 0%,
+    rgba(150, 100, 180, 0.28) 50%,
+    rgba(110,  80, 160, 0.20) 100%
+  );
+  border-color:    rgba(220, 180, 230, 0.45);
+  color:           rgba(255, 255, 255, 1.0);
+  transform:       translateY(-20px) scale(1.04);
+  box-shadow:
+    0 24px 60px rgba(160, 80, 180, 0.40),
+    0 12px 24px rgba(0,   0,   0,  0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  outline:         none;
 }
 
-#workspaces button {
-    color: @text;
-    padding: 0 4px;
-    transition: all 0.2s ease;
+/* ── Active (click) — card presses down ──────────────────────── */
+button:active {
+  transform:       translateY(-10px) scale(0.98);
+  background-color: rgba(160, 100, 170, 0.55);
+  box-shadow:
+    0 10px 30px rgba(160, 80, 180, 0.35),
+    0  4px 10px rgba(0,   0,   0,  0.40),
+    inset 0 2px 8px rgba(0, 0, 0, 0.20);
 }
 
-#workspaces button.active {
-    color: @mauve;
-    text-shadow: 0 0 5px rgba(202, 158, 230, 0.5);
+/* ══════════════════════════════════════════════════════════════
+   INDIVIDUAL BUTTON ICON IMAGES
+   Place SVG/PNG icons at the paths below, or use wlogout's
+   built-in icon names. The image-* properties set icon size.
+   ══════════════════════════════════════════════════════════════ */
+
+#lock {
+  background-image: image(url("/usr/share/wlogout/icons/lock.png"),
+                          url("icons/lock.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#workspaces button:hover {
-    background: transparent;
-    color: @blue;
+#logout {
+  background-image: image(url("/usr/share/wlogout/icons/logout.png"),
+                          url("icons/logout.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#clock {
-    color: @mauve;
+#suspend {
+  background-image: image(url("/usr/share/wlogout/icons/suspend.png"),
+                          url("icons/suspend.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#battery {
-    color: @green;
+#shutdown {
+  background-image: image(url("/usr/share/wlogout/icons/shutdown.png"),
+                          url("icons/shutdown.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#battery.warning {
-    color: #ef9f76;
+#hibernate {
+  background-image: image(url("/usr/share/wlogout/icons/hibernate.png"),
+                          url("icons/hibernate.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#battery.critical {
-    color: @red;
-    animation: blink 1s steps(2, start) infinite;
+#reboot {
+  background-image: image(url("/usr/share/wlogout/icons/reboot.png"),
+                          url("icons/reboot.png"));
+  background-repeat:   no-repeat;
+  background-position: center 42%;
+  background-size:     56px 56px;
 }
 
-#custom-wlogout {
-    color: @red;
-    padding-right: 16px;
-    padding-left: 16px;
-}
-
-/* Groups require specific handling so the modules inside them look united inside one pill */
-#group-cpu-ram > *,
-#group-storage > *,
-#group-connectivity > *,
-#group-power > * {
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    margin: 0;
-    padding: 0 6px;
-}
-
-/* Clean up borders inside groups */
-#group-cpu-ram, #group-storage, #group-connectivity, #group-power {
-    padding: 4px 8px;
-}
-
-@keyframes blink {
-    to {
-        color: @text;
-        background-color: @red;
-    }
+/* ── Text label (rendered below icon) ───────────────────────── */
+/* wlogout places the label as button text, icon is background-image */
+/* We push text to the bottom of the card */
+button label,
+button {
+  font-size:    13px;
+  font-weight:  400;
+  letter-spacing: 0.8px;
+  text-shadow:  0 1px 6px rgba(0, 0, 0, 0.60);
 }

@@ -1,104 +1,225 @@
 {
     "layer": "top",
     "position": "top",
-    "mod": "dock",
-    "exclusive": true,
-    "passthrough": false,
-    "gtk-layer-shell": true,
-    "height": 40,
-    "spacing": 4,
+    "mode": "hide",
+    "exclusive": false,
+    "ipc": true,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "spacing": 0,
 
-    "modules-left": ["niri/workspaces", "niri/window"],
-    "modules-center": ["clock"],
-    "modules-right": ["privacy", "group/hardware", "network", "wireplumber", "custom/power"],
+    // --- MODULE LAYOUT ---
+    "modules-left": [
+        "custom/launcher",
+        "niri/workspaces",
+        "wlr/taskbar", // Acts as Pinned Apps / Window list
+        "custom/window_actions"
+    ],
+    "modules-center": [
+        "mpris",
+        "clock",
+        "niri/window", // Current App
+        "privacy"
+    ],
+    "modules-right": [
+        "power-profiles-daemon",
+        "custom/scx",
+        "group/cpu-ram",
+        "custom/gpu",
+        "group/storage",
+        "network",
+        "group/connectivity",
+        "group/power",
+        "custom/notification",
+        "custom/wlogout"
+    ],
 
-    // --- Niri Modules ---
+    // --- MODULE DEFINITIONS ---
+
+    // LEFT
+    "custom/launcher": {
+        "format": "󰣇",
+        "on-click": "fuzzel",
+        "tooltip": false
+    },
     "niri/workspaces": {
         "format": "{icon}",
         "format-icons": {
-            "focused": "󰮯",
-            "active": "󰊠",
-            "default": "󰇘",
-            "urgent": "󱈸"
+            "active": "󰮯",
+            "default": "󰊠"
         }
     },
-
-    "niri/window": {
-        "format": "{title}",
-        "separate-outputs": true,
-        "max-length": 35
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 16,
+        "all-outputs": true,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": ["fuzzel", "waybar"]
     },
-
-    // --- Center ---
-    "clock": {
-        "format": "{:%H:%M}",
-        "format-alt": "󰃭  {:%A, %B %d, %Y}",
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
-        "calendar": {
-            "mode": "month",
-            "on-scroll": 1,
-            "format": {
-                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
-            }
-        }
-    },
-
-    // --- Hardware Drawer (Dynamic Island Style) ---
-    "group/hardware": {
-        "orientation": "inherit",
-        "drawer": {
-            "transition-duration": 500,
-            "children-class": "not-power",
-            "transition-left-to-right": false
-        },
-        "modules": [
-            "custom/system-icon", // The trigger icon
-            "cpu",
-            "memory",
-            "custom/gpu"
-        ]
-    },
-
-    "custom/system-icon": {
-        "format": "󰍛",
+    "custom/window_actions": {
+        "format": "󰅖",
+        "on-click": "niri msg action close-window",
         "tooltip": false
     },
 
-    "cpu": { "format": "  {usage}%", "interval": 5 },
-    "memory": { "format": "  {}%", "interval": 5 },
-    "custom/gpu": {
-        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
-        "format": "󰢮  {}%",
-        "interval": 5
+    // MIDDLE
+    "mpris": {
+        "format": "{player_icon} {title} - {artist}",
+        "format-paused": "{status_icon} <i>{title} - {artist}</i>",
+        "player-icons": {
+            "default": "󰎆",
+            "spotify": ""
+        },
+        "status-icons": {
+            "paused": "󰏤"
+        },
+        "max-length": 35
     },
-
-    // --- Indicators ---
+    "clock": {
+        "format": "  {:%H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "on-scroll"     : 1,
+            "format": {
+                "months":     "<span color='#cdd6f4'><b>{}</b></span>",
+                "days":       "<span color='#a6adc8'>{}</span>",
+                "today":      "<span color='#f38ba8'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+    "niri/window": {
+        "format": "  {title}",
+        "max-length": 40
+    },
     "privacy": {
-        "icon-spacing": 4,
-        "icon-size": 18,
-        "nodes": [
-            { "type": "audio-in", "tooltip": true },
-            { "type": "video", "tooltip": true }
+        "icon-spacing": 8,
+        "icon-size": 14,
+        "transition-duration": 250,
+        "modules": [
+            {"type": "screenshare", "tooltip": true},
+            {"type": "audio-out", "tooltip": true},
+            {"type": "audio-in", "tooltip": true}
         ]
     },
 
+    // RIGHT (Groups used for pill consolidation)
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power Profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "",
+            "performance": "",
+            "balanced": "",
+            "power-saver": ""
+        }
+    },
+    "custom/scx": {
+        "format": "󰑇 {}",
+        "exec": "scx-status-script", // Placeholder for your SCX script
+        "interval": 2,
+        "tooltip": true
+    },
+    "group/cpu-ram": {
+        "orientation": "horizontal",
+        "modules": ["cpu", "temperature", "memory"]
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "interval": 2
+    },
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // Adjust for your system
+        "format": " {temperatureC}°C"
+    },
+    "memory": {
+        "format": " {}%",
+        "tooltip-format": "RAM: {used}GB / {total}GB",
+        "interval": 2
+    },
+    "custom/gpu": {
+        "format": "󰢮 {}",
+        "exec": "gpu-status-script", // Placeholder for GPU usage/temp/vram script
+        "interval": 2,
+        "tooltip": true
+    },
     "network": {
-        "format-wifi": " ",
-        "format-ethernet": "󰈀",
-        "tooltip-format": "{essid} ({signalStrength}%)",
-        "format-disconnected": "󰤮 "
+        "format-wifi": "  {bandwidthDownBytes} ⇣ {bandwidthUpBytes} ⇡",
+        "format-ethernet": "󰈀  {bandwidthDownBytes} ⇣ {bandwidthUpBytes} ⇡",
+        "format-disconnected": "󰤭 Disconnected",
+        "interval": 2,
+        "tooltip-format": "{essid} - {signalStrength}%"
     },
-
-    "wireplumber": {
-        "format": "{icon}  {volume}%",
-        "format-muted": "󰝟",
-        "format-icons": ["󰕿", "󰖀", "󰕾"],
-        "on-click": "helvum" // Opens patchbay for Pipewire
+    "group/storage": {
+        "orientation": "horizontal",
+        "modules": ["disk", "custom/nvme"]
     },
-
-    "custom/power": {
-        "format": "⏻",
-        "on-click": "wlogout",
+    "disk": {
+        "format": " {percentage_used}%",
+        "interval": 30
+    },
+    "custom/nvme": {
+        "format": "󰋊 {}",
+        "exec": "nvme-health-script", // Placeholder for smartctl health/speed script
+        "interval": 10
+    },
+    "group/connectivity": {
+        "orientation": "horizontal",
+        "modules": ["bluetooth", "backlight"]
+    },
+    "bluetooth": {
+        "format": " {status}",
+        "format-connected": " {device_alias}",
+        "tooltip-format": "{device_enumerate}",
+        "on-click": "blueman-manager"
+    },
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"]
+    },
+    "group/power": {
+        "orientation": "horizontal",
+        "modules": ["battery", "custom/battery_health"]
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "custom/battery_health": {
+        "format": "󰓢 {}",
+        "exec": "cat /sys/class/power_supply/BAT0/capacity_level", // Simplistic, adjust as needed
+        "interval": 60
+    },
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+    "custom/wlogout": {
+        "format": "",
+        "on-click": "wlogout -b 2",
         "tooltip": false
     }
 }

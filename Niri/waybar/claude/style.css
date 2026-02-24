@@ -1,0 +1,629 @@
+/* ╔══════════════════════════════════════════════════════════════╗
+   ║  Waybar Style — HyDE × end4 inspired · Pill UI · 2026       ║
+   ║  AMD · Niri · Arch Linux                                     ║
+   ╚══════════════════════════════════════════════════════════════╝
+
+   Design Language:
+   ─ Catppuccin Mocha palette (deep navy-purple base)
+   ─ Frosted-glass pills with layered blur + subtle gradients
+   ─ Micro-animations on hover & state change
+   ─ Nerd Font icons throughout
+   ─ Auto-hide: bar slides off-screen, thin trigger strip stays
+   ─ Full 2026 neumorphic-glass hybrid aesthetic
+*/
+
+/* ── Imports ──────────────────────────────────────────────── */
+@import url("colors.css");
+
+/* ── Font ─────────────────────────────────────────────────── */
+* {
+  font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", monospace;
+  font-size:   13px;
+  font-weight: 500;
+  min-height:  0;
+  border:      none;
+  border-radius: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AUTO-HIDE MECHANISM
+   The bar sits at the very top. Normally it's slid up by its
+   own height so only a 3px sensor strip is visible.
+   Hovering the strip (or the revealed bar) slides it down.
+   exclusive-zone: -1 means windows already fill the screen.
+   ══════════════════════════════════════════════════════════════ */
+
+window#waybar {
+  background:   transparent;
+  color:        @text;
+
+  /* Slide bar UP, leaving 3px hover-sensor at the top */
+  margin-top:   -45px;
+  transition:   margin-top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reveal on hover — the full bar slides into view */
+window#waybar:hover {
+  margin-top:  0px;
+}
+
+/* ── Main Bar Container ───────────────────────────────────── */
+.panel {
+  background:   transparent;
+}
+
+/* ── Box (each section: left / center / right) ───────────── */
+.modules-left,
+.modules-center,
+.modules-right {
+  padding:      4px 6px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PILL SYSTEM
+   Every widget group or standalone module gets the pill class.
+   Individual modules are "micro-pills" inside their sections.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Outer pill — wraps each logical group */
+.pill-outer {
+  background:   alpha(@surface0, 0.72);
+  border:       1px solid alpha(@overlay0, 0.30);
+  border-radius: 999px;
+  padding:      0 6px;
+  margin:       3px 3px;
+  box-shadow:
+    0 4px 24px alpha(@base, 0.55),
+    inset 0 1px 0 alpha(@text, 0.06),
+    0 0 0 0.5px alpha(@overlay1, 0.12);
+  transition:   all 0.22s ease;
+}
+
+/* Every button / label inside waybar acts as micro-pill */
+button,
+label {
+  padding:       0 8px;
+  margin:        2px 1px;
+  border-radius: 999px;
+  transition:    background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  color:         @subtext1;
+}
+
+button:hover,
+label:hover {
+  background: alpha(@surface1, 0.70);
+  color:      @text;
+  box-shadow: 0 0 0 1px alpha(@overlay1, 0.35);
+}
+
+/* ── Hover sensor strip (always-visible 3px line) ────────── */
+window#waybar::before {
+  content:      "";
+  display:      block;
+  position:     fixed;
+  top:          0;
+  left:         0;
+  right:        0;
+  height:       3px;
+  background:   linear-gradient(90deg,
+                  alpha(@mauve, 0.7),
+                  alpha(@blue, 0.5),
+                  alpha(@sapphire, 0.7),
+                  alpha(@blue, 0.5),
+                  alpha(@mauve, 0.7));
+  animation:    shimmer 4s linear infinite;
+  pointer-events: auto;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -500px 0; }
+  100% { background-position:  500px 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LEFT MODULES
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Workspaces ───────────────────────────────────────────── */
+#workspaces {
+  background:   alpha(@surface0, 0.72);
+  border:       1px solid alpha(@overlay0, 0.28);
+  border-radius: 999px;
+  padding:      2px 4px;
+  margin:       3px 3px;
+  box-shadow:   0 4px 20px alpha(@base, 0.5),
+                inset 0 1px 0 alpha(@text, 0.05);
+}
+
+#workspaces button {
+  color:         @overlay1;
+  padding:       2px 10px;
+  margin:        0 1px;
+  border-radius: 999px;
+  font-size:     14px;
+  transition:    all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width:     28px;
+}
+
+#workspaces button.active {
+  background:   linear-gradient(135deg, alpha(@mauve, 0.85), alpha(@blue, 0.75));
+  color:        @base;
+  box-shadow:   0 2px 12px alpha(@mauve, 0.55),
+                inset 0 1px 0 alpha(@text, 0.25);
+  padding:      2px 14px;
+  font-weight:  700;
+}
+
+#workspaces button.urgent {
+  background:   alpha(@red, 0.80);
+  color:        @base;
+  animation:    pulse-urgent 1.2s ease-in-out infinite;
+}
+
+#workspaces button:hover:not(.active) {
+  background:   alpha(@surface2, 0.70);
+  color:        @text;
+}
+
+@keyframes pulse-urgent {
+  0%, 100% { box-shadow: 0 0 6px  alpha(@red, 0.6); }
+  50%       { box-shadow: 0 0 18px alpha(@red, 0.9); }
+}
+
+/* ── Window Title ─────────────────────────────────────────── */
+#window {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      4px 14px;
+  margin:       3px 3px;
+  color:        @subtext0;
+  font-size:    12px;
+  font-style:   italic;
+  box-shadow:   0 3px 16px alpha(@base, 0.45);
+  transition:   all 0.22s ease;
+}
+
+#window:hover {
+  color:        @text;
+  background:   alpha(@surface1, 0.72);
+}
+
+/* ── Launcher ─────────────────────────────────────────────── */
+#custom-launcher {
+  background:   linear-gradient(135deg, alpha(@mauve, 0.85), alpha(@lavender, 0.75));
+  color:        @base;
+  font-size:    18px;
+  padding:      4px 14px;
+  margin:       3px 3px;
+  border-radius: 999px;
+  box-shadow:   0 4px 18px alpha(@mauve, 0.50),
+                inset 0 1px 0 alpha(@text, 0.20);
+  transition:   all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#custom-launcher:hover {
+  background:   linear-gradient(135deg, alpha(@mauve, 1.0), alpha(@pink, 0.90));
+  box-shadow:   0 6px 28px alpha(@mauve, 0.70),
+                inset 0 1px 0 alpha(@text, 0.30);
+  transform:    scale(1.08);
+}
+
+/* ── Pinned Apps ──────────────────────────────────────────── */
+#custom-pinned {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      4px 10px;
+  margin:       3px 3px;
+  color:        @subtext1;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CENTER MODULES
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Clock ────────────────────────────────────────────────── */
+#clock {
+  background:   linear-gradient(135deg, alpha(@blue, 0.80), alpha(@sapphire, 0.70));
+  color:        @base;
+  font-size:    14px;
+  font-weight:  700;
+  letter-spacing: 0.5px;
+  padding:      4px 18px;
+  margin:       3px 3px;
+  border-radius: 999px;
+  box-shadow:   0 4px 20px alpha(@blue, 0.45),
+                inset 0 1px 0 alpha(@text, 0.20);
+  transition:   all 0.22s ease;
+}
+
+#clock:hover {
+  background:   linear-gradient(135deg, alpha(@blue, 1.0), alpha(@mauve, 0.85));
+  box-shadow:   0 6px 28px alpha(@blue, 0.65);
+}
+
+/* ── Media Player ─────────────────────────────────────────── */
+#custom-media {
+  background:   alpha(@surface0, 0.70);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      4px 14px;
+  margin:       3px 3px;
+  color:        @green;
+  font-size:    12px;
+  max-width:    220px;
+  overflow:     hidden;
+  text-overflow: ellipsis;
+  white-space:  nowrap;
+  box-shadow:   0 3px 16px alpha(@base, 0.45);
+  transition:   all 0.22s ease;
+}
+
+#custom-media.Playing {
+  border-color: alpha(@green, 0.45);
+  box-shadow:   0 3px 16px alpha(@green, 0.22),
+                0 0 0 1px alpha(@green, 0.20);
+}
+
+#custom-media.Paused {
+  color:        @overlay1;
+  border-color: alpha(@overlay1, 0.30);
+}
+
+#custom-media:hover {
+  background: alpha(@surface1, 0.75);
+}
+
+/* ── Current App ──────────────────────────────────────────── */
+#custom-currentapp {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 14px;
+  margin:       3px 3px;
+  color:        @teal;
+  font-size:    12px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+}
+
+/* ── Privacy Indicators ───────────────────────────────────── */
+#privacy {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 10px;
+  margin:       3px 3px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+}
+
+#privacy-item.screenshare {
+  color:   @yellow;
+}
+
+#privacy-item.audio-in {
+  color:   @red;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RIGHT MODULES
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Power Profiles ───────────────────────────────────────── */
+#power-profiles-daemon {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  font-size:    16px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+  transition:   all 0.22s ease;
+}
+
+#power-profiles-daemon.performance {
+  color:        @red;
+  border-color: alpha(@red, 0.40);
+  box-shadow:   0 3px 14px alpha(@red, 0.25);
+}
+
+#power-profiles-daemon.balanced {
+  color:        @green;
+  border-color: alpha(@green, 0.35);
+}
+
+#power-profiles-daemon.power-saver {
+  color:        @blue;
+  border-color: alpha(@blue, 0.35);
+}
+
+/* ── SCX Scheduler ────────────────────────────────────────── */
+#custom-scx {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  color:        @peach;
+  font-size:    12px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+  transition:   all 0.22s ease;
+}
+
+#custom-scx:hover {
+  color:        @yellow;
+  border-color: alpha(@yellow, 0.40);
+  box-shadow:   0 3px 18px alpha(@yellow, 0.28);
+}
+
+/* ── System Group (CPU · Temp · RAM) ──────────────────────── */
+#cpu,
+#temperature,
+#memory {
+  background:   transparent;
+  border-radius: 999px;
+  padding:      4px 10px;
+  margin:       0 1px;
+  color:        @subtext1;
+  transition:   all 0.20s ease;
+}
+
+/* Group pill container */
+#cpu + #temperature,
+#temperature + #memory {
+  border-left: 1px solid alpha(@overlay0, 0.20);
+}
+
+/* Wrap the group in a pill */
+box > #cpu:first-child {
+  padding-left: 14px;
+}
+
+box > #memory:last-child {
+  padding-right: 14px;
+}
+
+.group-system > box {
+  background:   alpha(@surface0, 0.68);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      0 4px;
+  margin:       3px 3px;
+  box-shadow:   0 3px 16px alpha(@base, 0.42);
+}
+
+#cpu {
+  color: @sapphire;
+}
+
+#cpu.warning   { color: @yellow; }
+#cpu.critical  { color: @red; animation: pulse-red 1s ease-in-out infinite; }
+
+#temperature {
+  color: @teal;
+}
+
+#temperature.critical {
+  color: @red;
+  animation: pulse-red 1s ease-in-out infinite;
+}
+
+#memory {
+  color: @lavender;
+}
+
+#memory.warning   { color: @yellow; }
+#memory.critical  { color: @red; }
+
+@keyframes pulse-red {
+  0%, 100% { color: @red; }
+  50%       { color: @maroon; }
+}
+
+/* ── GPU Group ────────────────────────────────────────────── */
+#custom-gpu-usage,
+#custom-gpu-temp,
+#custom-gpu-vram {
+  background:   transparent;
+  border-radius: 999px;
+  padding:      4px 10px;
+  margin:       0 1px;
+  color:        @subtext1;
+}
+
+.group-gpu > box {
+  background:   alpha(@surface0, 0.68);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      0 4px;
+  margin:       3px 3px;
+  box-shadow:   0 3px 16px alpha(@base, 0.42);
+}
+
+#custom-gpu-usage { color: @pink; }
+#custom-gpu-temp  { color: @flamingo; }
+#custom-gpu-vram  { color: @rosewater; }
+
+/* ── Network Group ────────────────────────────────────────── */
+.group-network > box {
+  background:   alpha(@surface0, 0.68);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      0 4px;
+  margin:       3px 3px;
+  box-shadow:   0 3px 16px alpha(@base, 0.42);
+}
+
+#network {
+  padding: 4px 10px;
+  color:   @sky;
+}
+
+#network.disconnected {
+  color: @red;
+}
+
+#network.linked {
+  color: @yellow;
+}
+
+/* ── NVMe ─────────────────────────────────────────────────── */
+#custom-nvme {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  color:        @teal;
+  font-size:    12px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+}
+
+/* ── Bluetooth ────────────────────────────────────────────── */
+#bluetooth {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  font-size:    15px;
+  color:        @blue;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+  transition:   all 0.22s ease;
+}
+
+#bluetooth.connected {
+  color:        @sapphire;
+  border-color: alpha(@sapphire, 0.40);
+  box-shadow:   0 3px 16px alpha(@sapphire, 0.30);
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+  color: @overlay0;
+}
+
+/* ── Brightness ───────────────────────────────────────────── */
+#backlight {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  color:        @yellow;
+  font-size:    12px;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+}
+
+/* ── Battery Group ────────────────────────────────────────── */
+.group-battery > box {
+  background:   alpha(@surface0, 0.68);
+  border:       1px solid alpha(@overlay0, 0.25);
+  border-radius: 999px;
+  padding:      0 4px;
+  margin:       3px 3px;
+  box-shadow:   0 3px 16px alpha(@base, 0.42);
+}
+
+#battery {
+  padding: 4px 10px;
+  color:   @green;
+}
+
+#battery.good     { color: @green; }
+#battery.warning  { color: @yellow; }
+#battery.critical {
+  color: @red;
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+#battery.charging,
+#battery.plugged {
+  color: @teal;
+}
+
+#custom-battery-health {
+  padding: 4px 10px;
+  color:   @subtext0;
+  font-size: 11px;
+}
+
+/* ── Notifications ────────────────────────────────────────── */
+#custom-notifications {
+  background:   alpha(@surface0, 0.65);
+  border:       1px solid alpha(@overlay0, 0.22);
+  border-radius: 999px;
+  padding:      4px 12px;
+  margin:       3px 3px;
+  font-size:    16px;
+  color:        @subtext1;
+  box-shadow:   0 3px 14px alpha(@base, 0.40);
+  transition:   all 0.22s ease;
+}
+
+#custom-notifications.notification {
+  color:        @peach;
+  border-color: alpha(@peach, 0.40);
+  box-shadow:   0 3px 16px alpha(@peach, 0.28);
+  animation:    bell-ring 2s ease-in-out infinite;
+}
+
+#custom-notifications.dnd-notification,
+#custom-notifications.dnd-none {
+  color:        @overlay0;
+}
+
+@keyframes bell-ring {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  92%            { transform: rotate(-12deg); }
+  96%            { transform: rotate(12deg); }
+}
+
+/* ── Wlogout ──────────────────────────────────────────────── */
+#custom-wlogout {
+  background:   linear-gradient(135deg, alpha(@red, 0.75), alpha(@maroon, 0.65));
+  color:        @base;
+  font-size:    16px;
+  padding:      4px 14px;
+  margin:       3px 3px;
+  border-radius: 999px;
+  box-shadow:   0 4px 18px alpha(@red, 0.45),
+                inset 0 1px 0 alpha(@text, 0.15);
+  transition:   all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#custom-wlogout:hover {
+  background:   linear-gradient(135deg, alpha(@red, 1.0), alpha(@maroon, 0.90));
+  box-shadow:   0 6px 28px alpha(@red, 0.65);
+  transform:    scale(1.10);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOOLTIP STYLE
+   ══════════════════════════════════════════════════════════════ */
+
+tooltip {
+  background:   alpha(@surface0, 0.92);
+  border:       1px solid alpha(@overlay1, 0.35);
+  border-radius: 14px;
+  color:        @text;
+  padding:      8px 14px;
+  box-shadow:   0 8px 32px alpha(@base, 0.70),
+                inset 0 1px 0 alpha(@text, 0.08);
+}
+
+tooltip label {
+  color:        @text;
+  padding:      0;
+  margin:       0;
+  border-radius: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SCROLL INDICATOR (thin gradient line above bar when revealed)
+   ══════════════════════════════════════════════════════════════ */
+
+window#waybar.hidden {
+  opacity: 0.35;
+}

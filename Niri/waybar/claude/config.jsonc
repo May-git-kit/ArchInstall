@@ -1,0 +1,389 @@
+// ╔═══════════════════════════════════════════════════════════╗
+// ║         Waybar Config — Niri · Arch Linux · AMD           ║
+// ║         Design: HyDE × end4 inspired, 2026 pill UI        ║
+// ╚═══════════════════════════════════════════════════════════╝
+
+[
+  {
+    // ── Core Bar Settings ──────────────────────────────────────
+    "layer": "top",
+    "position": "top",
+    "exclusive-zone": -1,        // -1 = no reserved space → windows fill full screen
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "height": 48,
+    "spacing": 4,
+    "reload_style_on_change": true,
+    "fixed-center": true,
+
+    // ── Layout ────────────────────────────────────────────────
+    "modules-left": [
+      "niri/workspaces",
+      "niri/window",
+      "custom/pinned",
+      "custom/launcher"
+    ],
+
+    "modules-center": [
+      "custom/media",
+      "clock",
+      "custom/currentapp",
+      "privacy"
+    ],
+
+    "modules-right": [
+      "power-profiles-daemon",
+      "custom/scx",
+      "group/system",
+      "group/gpu",
+      "group/network",
+      "custom/nvme",
+      "bluetooth",
+      "backlight",
+      "group/battery",
+      "custom/notifications",
+      "custom/wlogout"
+    ],
+
+    // ╔═══════════════════════════════════════════════════════╗
+    // ║                   LEFT MODULES                        ║
+    // ╚═══════════════════════════════════════════════════════╝
+
+    // ── Niri Workspaces ───────────────────────────────────────
+    "niri/workspaces": {
+      "format": "{icon}",
+      "format-icons": {
+        "active":  "󰮯",
+        "default": "○",
+        "urgent":  "󰀦",
+        "empty":   "·"
+      },
+      "on-scroll-up":   "niri msg action focus-workspace-up",
+      "on-scroll-down": "niri msg action focus-workspace-down",
+      "on-click":       "activate",
+      "all-outputs":    false,
+      "warp-on-scroll": false
+    },
+
+    // ── Active Window Title ───────────────────────────────────
+    "niri/window": {
+      "format":             "{}",
+      "rewrite": {
+        "(.*) — Mozilla Firefox": "󰈹 $1",
+        "(.*) - fish":            "󰈺 $1",
+        "(.*) - nvim":            "󰕷 $1",
+        "(.*) - Visual Studio Code": "󰨞 $1",
+        "kitty":                  "󰄛 Terminal",
+        "thunar":                 "󰉋 Files",
+        "Discord":                "󰙯 Discord",
+        "Spotify":                "󰓇 Spotify"
+      },
+      "max-length":         35,
+      "separate-outputs":   true,
+      "empty-text":         "󰇄 Desktop"
+    },
+
+    // ── Pinned Apps ───────────────────────────────────────────
+    "custom/pinned": {
+      "format":     "{}",
+      "exec":       "~/.config/waybar/scripts/pinned.sh",
+      "interval":   "once",
+      "on-click":   "~/.config/waybar/scripts/pinned.sh click",
+      "tooltip":    false,
+      "return-type": "json"
+    },
+
+    // ── App Launcher ──────────────────────────────────────────
+    "custom/launcher": {
+      "format":   "󱓞",
+      "tooltip":  false,
+      "on-click": "fuzzel",
+      "on-right-click": "nwg-drawer"
+    },
+
+    // ╔═══════════════════════════════════════════════════════╗
+    // ║                  CENTER MODULES                       ║
+    // ╚═══════════════════════════════════════════════════════╝
+
+    // ── Media Player ──────────────────────────────────────────
+    "custom/media": {
+      "format":       "{icon} {}",
+      "format-icons": {
+        "Playing": "󰎈",
+        "Paused":  "󰏤",
+        "Stopped": "󰓛"
+      },
+      "return-type":  "json",
+      "max-length":   30,
+      "exec":         "playerctl -a metadata --format '{\"text\": \"{{playerName}}: {{markup_escape(title)}} — {{markup_escape(artist)}}\", \"tooltip\": \"{{markup_escape(title)}} by {{markup_escape(artist)}} on {{markup_escape(album)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F 2>/dev/null",
+      "exec-if":      "playerctl status 2>/dev/null",
+      "on-click":     "playerctl play-pause",
+      "on-scroll-up": "playerctl next",
+      "on-scroll-down": "playerctl previous",
+      "smooth-scrolling-threshold": 5,
+      "interval":     2
+    },
+
+    // ── Clock & Calendar ──────────────────────────────────────
+    "clock": {
+      "format":          "󰅐 {:%H:%M}",
+      "format-alt":      "󰃭 {:%a %d %b, %Y}",
+      "tooltip-format":  "<span font='JetBrainsMono Nerd Font 10'>{calendar}</span>",
+      "calendar": {
+        "mode":          "month",
+        "mode-mon-col":  3,
+        "weeks-pos":     "right",
+        "on-scroll":     1,
+        "format": {
+          "months":   "<span color='#cba6f7'><b>{}</b></span>",
+          "days":     "<span color='#cdd6f4'><b>{}</b></span>",
+          "weeks":    "<span color='#6c7086'><b>W{}</b></span>",
+          "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
+          "today":    "<span color='#f38ba8'><b><u>{}</u></b></span>"
+        }
+      },
+      "actions": {
+        "on-click-right": "mode",
+        "on-scroll-up":   "shift_up",
+        "on-scroll-down": "shift_down"
+      }
+    },
+
+    // ── Current Focused App ───────────────────────────────────
+    "custom/currentapp": {
+      "format":      "{icon} {}",
+      "format-icons": {
+        "firefox":  "󰈹",
+        "kitty":    "󰄛",
+        "nvim":     "󰕷",
+        "code":     "󰨞",
+        "discord":  "󰙯",
+        "spotify":  "󰓇",
+        "thunar":   "󰉋",
+        "default":  "󰣆"
+      },
+      "exec":        "~/.config/waybar/scripts/current_app.sh",
+      "interval":    2,
+      "return-type": "json",
+      "max-length":  20
+    },
+
+    // ── Privacy Indicators ────────────────────────────────────
+    "privacy": {
+      "icon-spacing": 4,
+      "icon-size":    16,
+      "transition-duration": 250,
+      "modules": [
+        { "type": "screenshare", "tooltip": true, "tooltip-icon-size": 24 },
+        { "type": "audio-in",   "tooltip": true, "tooltip-icon-size": 24 }
+      ]
+    },
+
+    // ╔═══════════════════════════════════════════════════════╗
+    // ║                  RIGHT MODULES                        ║
+    // ╚═══════════════════════════════════════════════════════╝
+
+    // ── Power Profiles ────────────────────────────────────────
+    "power-profiles-daemon": {
+      "format":        "{icon}",
+      "tooltip-format": "Power Profile: {profile}\nDriver: {driver}",
+      "format-icons": {
+        "default":            "󰓅",
+        "performance":        "󱐋",
+        "balanced":           "󰾅",
+        "power-saver":        "󰾆"
+      },
+      "on-click": "powerprofilesctl set $(powerprofilesctl list | awk -F: '/^  [a-z]/{print $1}' | grep -v \"$(powerprofilesctl get)\" | fzf --prompt='Profile: ' --height=4)"
+    },
+
+    // ── SCX Scheduler Manager ─────────────────────────────────
+    "custom/scx": {
+      "format":      "󱎴 {}",
+      "exec":        "~/.config/waybar/scripts/scx.sh",
+      "interval":    5,
+      "return-type": "json",
+      "tooltip":     true,
+      "on-click":    "~/.config/waybar/scripts/scx_switch.sh"
+    },
+
+    // ── System Group (CPU + Temp + RAM) ───────────────────────
+    "group/system": {
+      "orientation": "horizontal",
+      "modules": ["cpu", "temperature", "memory"]
+    },
+
+    "cpu": {
+      "format":          "󰻠 {usage}%",
+      "tooltip-format":  "CPU Usage: {usage}%\nLoad: {load}",
+      "interval":        2,
+      "on-click":        "kitty --title='System Monitor' btop",
+      "states": {
+        "warning":  70,
+        "critical": 90
+      }
+    },
+
+    "temperature": {
+      "hwmon-path-abs": "/sys/class/hwmon",
+      "input-filename": "temp1_input",
+      "critical-threshold": 85,
+      "interval":        2,
+      "format":          "{icon} {temperatureC}°C",
+      "format-critical": "󱃂 {temperatureC}°C",
+      "format-icons":    ["󰔄", "󰔃", "󰔅", "󰔆", "󱃂"],
+      "tooltip":         true
+    },
+
+    "memory": {
+      "format":         "󰍛 {percentage}%",
+      "format-alt":     "󰍛 {used:0.1f}G/{total:0.1f}G",
+      "tooltip-format": "RAM: {used:0.2f}GiB / {total:0.2f}GiB\nSwap: {swapUsed:0.2f}GiB / {swapTotal:0.2f}GiB",
+      "interval":        2,
+      "on-click":        "kitty --title='System Monitor' btop",
+      "states": {
+        "warning":  75,
+        "critical": 90
+      }
+    },
+
+    // ── GPU Group (AMD) ───────────────────────────────────────
+    "group/gpu": {
+      "orientation": "horizontal",
+      "modules": ["custom/gpu-usage", "custom/gpu-temp", "custom/gpu-vram"]
+    },
+
+    "custom/gpu-usage": {
+      "exec":        "~/.config/waybar/scripts/gpu.sh usage",
+      "format":      "󰹑 {}",
+      "interval":    2,
+      "tooltip":     false
+    },
+
+    "custom/gpu-temp": {
+      "exec":        "~/.config/waybar/scripts/gpu.sh temp",
+      "format":      "󰔅 {}",
+      "interval":    2,
+      "tooltip":     false
+    },
+
+    "custom/gpu-vram": {
+      "exec":        "~/.config/waybar/scripts/gpu.sh vram",
+      "format":      "󰧠 {}",
+      "interval":    2,
+      "return-type": "json",
+      "tooltip":     true
+    },
+
+    // ── Network Group (Wifi + Speed) ──────────────────────────
+    "group/network": {
+      "orientation": "horizontal",
+      "modules": ["network#icon", "network#speed"]
+    },
+
+    "network#icon": {
+      "format-wifi":       "󰤨",
+      "format-ethernet":   "󰈀",
+      "format-disconnected": "󰤭",
+      "format-linked":     "󰤫",
+      "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}/{cidr}\nFreq: {frequency}MHz",
+      "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+      "tooltip-format-disconnected": "Disconnected",
+      "interval":          5,
+      "on-click":          "nm-connection-editor"
+    },
+
+    "network#speed": {
+      "format":            "↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+      "interval":          2,
+      "tooltip":           false
+    },
+
+    // ── NVMe Health + Speed ───────────────────────────────────
+    "custom/nvme": {
+      "exec":        "~/.config/waybar/scripts/nvme.sh",
+      "format":      "{}",
+      "interval":    3,
+      "return-type": "json",
+      "on-click":    "~/.config/waybar/scripts/nvme.sh details"
+    },
+
+    // ── Bluetooth ─────────────────────────────────────────────
+    "bluetooth": {
+      "format":           "󰂯",
+      "format-connected": "󰂱 {num_connections}",
+      "format-disabled":  "󰂲",
+      "format-off":       "󰂲",
+      "tooltip-format":            "Bluetooth: {status}",
+      "tooltip-format-connected":  "󰂱 {device_alias}\n{device_battery_percentage}% battery",
+      "tooltip-format-connected-battery": "󰂱 {device_alias} · {device_battery_percentage}%",
+      "on-click":         "blueman-manager",
+      "on-click-right":   "rfkill toggle bluetooth"
+    },
+
+    // ── Brightness ────────────────────────────────────────────
+    "backlight": {
+      "format":       "{icon} {percent}%",
+      "format-icons": ["󰋙", "󰛩", "󰛨", "󰛧", "󰛦", "󰛥", "󰛤", "󰛣", "󰛠"],
+      "on-scroll-up":   "brightnessctl set 5%+",
+      "on-scroll-down": "brightnessctl set 5%-",
+      "smooth-scrolling-threshold": 1,
+      "tooltip":      false
+    },
+
+    // ── Battery Group ─────────────────────────────────────────
+    "group/battery": {
+      "orientation": "horizontal",
+      "modules": ["battery", "custom/battery-health"]
+    },
+
+    "battery": {
+      "states": {
+        "good":     95,
+        "warning":  30,
+        "critical": 15
+      },
+      "format":           "{icon} {capacity}%",
+      "format-charging":  "󰂄 {capacity}%",
+      "format-plugged":   "󰚥 {capacity}%",
+      "format-full":      "󰁹 Full",
+      "format-icons":     ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+      "tooltip-format":   "{timeTo}\nPower draw: {power}W\nCycles: see health indicator",
+      "interval":         30
+    },
+
+    "custom/battery-health": {
+      "exec":        "~/.config/waybar/scripts/battery_health.sh",
+      "interval":    300,
+      "return-type": "json",
+      "format":      "󱟠 {}"
+    },
+
+    // ── Notifications ─────────────────────────────────────────
+    "custom/notifications": {
+      "exec":        "~/.config/waybar/scripts/notifications.sh",
+      "return-type": "json",
+      "format":      "{icon}",
+      "format-icons": {
+        "notification": "󰂚",
+        "none":         "󰂜",
+        "dnd-notification": "󱆫",
+        "dnd-none":     "󰂛",
+        "inhibited-notification": "󰂚",
+        "inhibited-none": "󰂜",
+        "dnd-inhibited-notification": "󱆫",
+        "dnd-inhibited-none": "󰂛"
+      },
+      "interval":    "once",
+      "on-click":    "swaync-client -t -sw",
+      "on-click-right": "swaync-client -d -sw"
+    },
+
+    // ── Wlogout ───────────────────────────────────────────────
+    "custom/wlogout": {
+      "format":   "󰐥",
+      "tooltip":  false,
+      "on-click": "wlogout --protocol layer-shell",
+      "on-right-click": "systemctl poweroff"
+    }
+  }
+]

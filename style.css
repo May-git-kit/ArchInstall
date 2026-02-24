@@ -1,54 +1,118 @@
-/* General Bar Styling */
+@define-color base   rgba(30, 30, 46, 0.65); /* Translucent glass */
+@define-color mantle rgba(24, 24, 37, 0.8);
+@define-color text   #cdd6f4;
+@define-color blue   #8caaee;
+@define-color green  #a6d189;
+@define-color red    #e78284;
+@define-color mauve  #ca9ee6;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Material Design Icons", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
 window#waybar {
-    background: rgba(20, 20, 30, 0.85); /* Glassmorphism */
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    color: #cdd6f4;
-    font-family: "JetBrainsMono Nerd Font";
-    font-size: 14px;
-    border-radius: 12px;
-    margin: 8px;
+    background-color: transparent;
 }
 
-/* Individual Module Padding */
-#workspaces, #window, #clock, #privacy, #network, #wireplumber, #custom-power, .group-hardware {
-    padding: 0 12px;
-    margin: 4px 2px;
-    background: rgba(45, 45, 70, 0.6);
-    border-radius: 8px;
+/* --- THE PILL DESIGN --- */
+/* Target all direct children of the left, center, and right module containers */
+.modules-left > widget > *,
+.modules-center > widget > *,
+.modules-right > widget > * {
+    background-color: @base;
+    color: @text;
+    border-radius: 100px; /* Perfect pill shape */
+    padding: 4px 14px;
+    margin: 4px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Niri Workspace Highlights */
-#workspaces button {
-    color: #6c7086;
-    padding: 0 4px;
-}
-#workspaces button.focused {
-    color: #89b4fa;
-    border-bottom: 2px solid #89b4fa;
-}
-#workspaces button.urgent {
-    color: #f38ba8;
+/* Hover effect for all interactive pills */
+.modules-left > widget > *:hover,
+.modules-center > widget > *:hover,
+.modules-right > widget > *:hover {
+    background-color: @mantle;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    color: @blue;
 }
 
-/* Hardware Drawer Styling */
-#custom-system-icon {
-    color: #fab387;
-    margin-right: 5px;
-}
+/* --- SPECIFIC MODULE TWEAKS --- */
 
-.group-hardware {
-    background: #313244;
-}
-
-/* Transitions for the Drawer */
-#cpu, #memory, #custom-gpu {
-    padding: 0 8px;
-    font-size: 12px;
-}
-
-/* Power Button */
-#custom-power {
-    color: #f38ba8;
+#custom-launcher {
     font-size: 18px;
-    padding-right: 15px;
+    color: @blue;
+    padding-right: 18px;
+    padding-left: 18px;
+}
+
+#workspaces button {
+    color: @text;
+    padding: 0 4px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+    color: @mauve;
+    text-shadow: 0 0 5px rgba(202, 158, 230, 0.5);
+}
+
+#workspaces button:hover {
+    background: transparent;
+    color: @blue;
+}
+
+#clock {
+    color: @mauve;
+}
+
+#battery {
+    color: @green;
+}
+
+#battery.warning {
+    color: #ef9f76;
+}
+
+#battery.critical {
+    color: @red;
+    animation: blink 1s steps(2, start) infinite;
+}
+
+#custom-wlogout {
+    color: @red;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+/* Groups require specific handling so the modules inside them look united inside one pill */
+#group-cpu-ram > *,
+#group-storage > *,
+#group-connectivity > *,
+#group-power > * {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    padding: 0 6px;
+}
+
+/* Clean up borders inside groups */
+#group-cpu-ram, #group-storage, #group-connectivity, #group-power {
+    padding: 4px 8px;
+}
+
+@keyframes blink {
+    to {
+        color: @text;
+        background-color: @red;
+    }
 }

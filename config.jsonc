@@ -1,0 +1,104 @@
+{
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "height": 40,
+    "spacing": 4,
+
+    "modules-left": ["niri/workspaces", "niri/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["privacy", "group/hardware", "network", "wireplumber", "custom/power"],
+
+    // --- Niri Modules ---
+    "niri/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "focused": "󰮯",
+            "active": "󰊠",
+            "default": "󰇘",
+            "urgent": "󱈸"
+        }
+    },
+
+    "niri/window": {
+        "format": "{title}",
+        "separate-outputs": true,
+        "max-length": 35
+    },
+
+    // --- Center ---
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "󰃭  {:%A, %B %d, %Y}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "on-scroll": 1,
+            "format": {
+                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+
+    // --- Hardware Drawer (Dynamic Island Style) ---
+    "group/hardware": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            "children-class": "not-power",
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "custom/system-icon", // The trigger icon
+            "cpu",
+            "memory",
+            "custom/gpu"
+        ]
+    },
+
+    "custom/system-icon": {
+        "format": "󰍛",
+        "tooltip": false
+    },
+
+    "cpu": { "format": "  {usage}%", "interval": 5 },
+    "memory": { "format": "  {}%", "interval": 5 },
+    "custom/gpu": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
+        "format": "󰢮  {}%",
+        "interval": 5
+    },
+
+    // --- Indicators ---
+    "privacy": {
+        "icon-spacing": 4,
+        "icon-size": 18,
+        "nodes": [
+            { "type": "audio-in", "tooltip": true },
+            { "type": "video", "tooltip": true }
+        ]
+    },
+
+    "network": {
+        "format-wifi": " ",
+        "format-ethernet": "󰈀",
+        "tooltip-format": "{essid} ({signalStrength}%)",
+        "format-disconnected": "󰤮 "
+    },
+
+    "wireplumber": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "󰝟",
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "on-click": "helvum" // Opens patchbay for Pipewire
+    },
+
+    "custom/power": {
+        "format": "⏻",
+        "on-click": "wlogout",
+        "tooltip": false
+    }
+}

@@ -1,0 +1,54 @@
+/* General Bar Styling */
+window#waybar {
+    background: rgba(20, 20, 30, 0.85); /* Glassmorphism */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    color: #cdd6f4;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 14px;
+    border-radius: 12px;
+    margin: 8px;
+}
+
+/* Individual Module Padding */
+#workspaces, #window, #clock, #privacy, #network, #wireplumber, #custom-power, .group-hardware {
+    padding: 0 12px;
+    margin: 4px 2px;
+    background: rgba(45, 45, 70, 0.6);
+    border-radius: 8px;
+}
+
+/* Niri Workspace Highlights */
+#workspaces button {
+    color: #6c7086;
+    padding: 0 4px;
+}
+#workspaces button.focused {
+    color: #89b4fa;
+    border-bottom: 2px solid #89b4fa;
+}
+#workspaces button.urgent {
+    color: #f38ba8;
+}
+
+/* Hardware Drawer Styling */
+#custom-system-icon {
+    color: #fab387;
+    margin-right: 5px;
+}
+
+.group-hardware {
+    background: #313244;
+}
+
+/* Transitions for the Drawer */
+#cpu, #memory, #custom-gpu {
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+/* Power Button */
+#custom-power {
+    color: #f38ba8;
+    font-size: 18px;
+    padding-right: 15px;
+}

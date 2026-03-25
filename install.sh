@@ -152,8 +152,8 @@ sudo pacman -Syyu
 # ========================================== 
 echo "🐧 Installing Optimized Kernel..." 
 # 'linux-cachyos' includes EEVDF scheduler tweaks for Ryzen
-pacman -S --noconfirm limine-mkinitcpio-hook limine-entry-tool limine-snapper-sync
 pacman -S --noconfirm linux-cachyos linux-cachyos-headers
+pacman -S --noconfirm limine-mkinitcpio-hook limine-entry-tool limine-snapper-sync
 pacman -S --noconfirm scx-tools scx-scheds scx-manager
 sudo limine-mkinitcpio
 # Ensure base-devel is present 
@@ -200,48 +200,48 @@ su - $USERNAME <<EOF
     # GNOME APPS (gtk based)
     
     paru -S --noconfirm nautilus python-nautilus nautilus-open-any-terminal nautilus-admin bubblewrap
-    paru -S --noconfirm gvfs gvfs-mtp gvfs-goa gvfs-google gvfs-onedrive sushi-git udiskie
-    paru -S --noconfirm gnome-disk-utility gnome-firmware gnome-calculator
-    paru -S --noconfirm keypunch resources tangram baobab loupe cine papers snapshot
+    #paru -S --noconfirm gvfs gvfs-mtp gvfs-goa gvfs-google gvfs-onedrive sushi-git udiskie
+    #paru -S --noconfirm gnome-disk-utility gnome-firmware gnome-calculator gnome-keyring
+    #paru -S --noconfirm keypunch resources tangram baobab loupe cine papers snapshot foliate
     
     # KDE APPS (qt based)
 	
 	echo "💿 Installing Apps..."
 	# APPS
 	paru -S --noconfirm zen-browser-bin localsend-bin
-	paru -S --noconfirm ventoy 
-	paru -S --noconfirm cameractrls obsidian  file-roller
+	paru -S --noconfirm ventoy hamr-bin
+	paru -S --noconfirm cameractrls obsidian file-roller
 	paru -S --noconfirm zathura zathura-pdf-mupdf mupdf-tools 
-	paru -S --noconfirm czkawka-gui clipse walker-bin
-	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp planify elephant
+	paru -S --noconfirm czkawka-gui clipse
+	#paru -S --noconfirm satty deskreen-bin trash-cli peazip sioyek jamesdsp planify walker-bin elephant-all
 	
 	echo "💿 Installing System Utilities Apps..."
 	# System Utilites APPS
-	paru -S --noconfirm networkmanager iwd iwgtk firewalld bluez bluez-utils blueman nmgui-bin
+	paru -S --noconfirm networkmanager iwd iwgtk firewalld bluez bluez-utils nmgui-bin
 	paru -S --noconfirm brightnessctl power-profiles-daemon fwupd
 	paru -S --noconfirm zram-generator btrfs-progs e2fsprogs snapper
-	paru -S --noconfirm pamac-aur mission-center qdiskinfo
+	#paru -S --noconfirm pamac-aur mission-center qdiskinfo
 	paru -S --noconfirm amdgpu_top uv
 	paru -S --noconfirm btrfs-assistant overskride-bin
 	#paru -S --noconfirm virt-manager bauh cups cups-pdf howdy
 	
 	echo "💿 Installing Cachyos Apps..."
 	# Cachyos APPS
-	paru -S --noconfirm cachyos-settings cachyos-hooks ananicy-cpp-git cachyos-ananicy-rules-git
-	paru -S --noconfirm cachyos-kernel-manager cachyos-sysctl-manager cachyos-snapper-support
+	paru -S --noconfirm cachyos-settings cachyos-hooks ananicy-cpp cachyos-ananicy-rules
+	#paru -S --noconfirm cachyos-kernel-manager cachyos-sysctl-manager cachyos-snapper-support
 	#paru -S --noconfirm wine-cachyos proton-cachyos
     
 	echo "💿 Installing Shell and Terminal Stack..."
 	# --- SHELL & TERMINAL --- 
 	paru -S --noconfirm fish ghostty micro neovim  
-	paru -S --noconfirm lazygit yazi atuin stow zellij unrar unzip wget curl man-db
-	paru -S --noconfirm fastfetch btop bat battop eza zoxide ripgrep fd sd procs dust tldr
+	paru -S --noconfirm fastfetch btop battop lazygit zellij stow unrar unzip wget curl 
+	paru -S --noconfirm eza bat zoxide ripgrep fd sd procs dust atuin tealdeer man-db yazi
 	paru -S --noconfirm gcc cmake pacman-contrib 
 	#paru -S --noconfirm rsync yt-dlp starship neovide
 	
 	echo "💿 Installing Audio Stack..."
 	# --- AUDIO --- 
-	paru -S --noconfirm pipewire pipewire-alsa pipewire-pulse wireplumber wpctl pwvucontrol helvum mpv-mpris playerctl
+	paru -S --noconfirm pipewire pipewire-alsa pipewire-pulse wireplumber pwvucontrol helvum mpv-mpris playerctl
 	#paru -S --noconfirm gstreamer gst-plugins-base gst-plugin-pipewire gst-plugins-rs gst-libav gst-plugin-gtk4 gst-plugins-bad gst-plugins-ugly
 	#paru -S --noconfirm mpv mpv-uosc-git mpv-thumbfast-git mpv-mpris webp-pixbuf-loader lsp-plugins pavucontrol qpwgraph
 	#https://github.com/zydezu/ModernX
@@ -255,20 +255,21 @@ su - $USERNAME <<EOF
 	
 	echo "💿 Installing Hypr Ecosystem..."
 	# --- HYPR TOOLS---
-	paru -S --noconfirm uwsm libnewt aquamarine hyprland hyprpaper hyprpolkitagent hypridle hyprlock hyprsunset hyprshot hyprpicker hyprcursor  
-	paru -S --noconfirm xdg-desktop-portal-hyprland xdg-desktop-portal-gtk xorg-xwayland hyprland-qt-support hyprqt6engine hyprshutdown hyprpwcenter hyprgraphics 
-	paru -S --noconfirm nwg-look nwg-dock-hyprland wdisplays hyprmon swaync wlogout-git snappy-switcher hyprkcs-git sddm swayosd
-	paru -S --noconfirm ironbar wayland-pipewire-idle-inhibit-git
+	#paru -S --noconfirm uwsm libnewt aquamarine hyprland hyprpaper hyprpolkitagent hypridle hyprlock hyprsunset hyprshot hyprpicker hyprcursor  
+	#paru -S --noconfirm xdg-desktop-portal-hyprland xdg-desktop-portal-gtk xorg-xwayland hyprland-qt-support hyprqt6engine hyprshutdown hyprpwcenter hyprgraphics 
+	#paru -S --noconfirm nwg-look nwg-dock-hyprland wdisplays swaync swayosd wlogout-git snappy-switcher hyprkcs-git sddm swayosd
+	#paru -S --noconfirm ironbar wayland-pipewire-idle-inhibit
 	
 	# --- NIRI TOOLS--- 
-	#paru -S --noconfirm niri xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk 
-	#paru -S --noconfirm waybar swaync swayosd-git wlsunset 
-	#paru -S --noconfirm polkit-kde-agent	
+	paru -S --noconfirm niri uwsm xwayland-satellite xdg-desktop-portal-gnome xdg-desktop-portal-gtk
+	paru -S --noconfirm polkit-gnome grim slurp hyprpicker xcursor-breeze swaybg
+	paru -S --noconfirm hyprpaper hypridle hyprlock hyprsunset wlogout-git waybar
+	paru -S --noconfirm nwg-look nwg-displays mako wayland-pipewire-idle-inhibit
 EOF
 
-============================================
+# ==========================================
 # 5. Set Shell to Fish
-============================================
+# ==========================================
 echo "Making Fish default shell..."
 chsh -s /usr/bin/fish $USERNAME
 
@@ -291,14 +292,15 @@ sudo systemctl enable --now ananicy-cpp
 sudo systemctl enable --now cachyos-ksm
 sudo systemctl enable --now scx.service
 sudo systemctl enable --now cachyos-rate-mirrors.timer
-sudo systemctl enable --now swayosd-libinput-backend.service
-#sudo systemctl enable --now sddm
+#sudo systemctl enable --now swayosd-libinput-backend.service
 #sudo systemctl enable --now libvirtd
 #sudo systemctl enable --now cups
-sudo systemctl daemon-reload
-systemctl --user enable --now pipewire 
-systemctl --user enable --now pipewire-pulse 
-systemctl --user enable --now wireplumber
-systemctl --user enable --now hyprpolkitagent
+#sudo systemctl daemon-reload
+sudo systemctl enable --now pipewire 
+sudo systemctl enable --now pipewire-pulse 
+sudo systemctl enable --now wireplumber
+sudo systemctl enable --now systemd-resolved
+sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+sudo tldr --update
 
 echo "✅ Master Setup Complete! Type 'exit' and reboot."
